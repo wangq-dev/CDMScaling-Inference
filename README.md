@@ -1,16 +1,27 @@
-# VLM Inference Code
+# CDMScaling: VLM Inference
+
+**EMNLP 2026 Main Conference (Oral)**
+
+This repository provides model adaptations and a single-image GPU inference script for vision-language models (VLMs) trained using the [LLaVA-OneVision](https://llava-vl.github.io/blog/2024-08-05-llava-onevision/) framework. It extends the official [LLaVA-NeXT](https://github.com/LLaVA-VL/LLaVA-NeXT) codebase to support different language model backbones used in our study.
+
+### 🔗 Resources
+
+- 📄 **Paper:** [What Transfers from Text to Vision? Capability Scaling Laws and Transfer Dynamics for VLMs](https://arxiv.org/abs/2608.00013)
+- 🌐 **Project Website:** [CDMScaling](https://wangq-dev.github.io/CDMScaling-Website/)
+- 💻 **Main Repository:** [CDMScaling](https://github.com/wangq-dev/CDMScaling)
+- 🤗 **Model Weights:** [ModelScope](https://modelscope.ai/profile/wangq2k)
 
 ## Introduction
 
-This repository provides code adaptations and a single-image GPU inference script for vision-language models (VLMs) trained using the [LLaVA-OneVision](https://llava-vl.github.io/blog/2024-08-05-llava-onevision/) framework. It supports different language model backbones by providing modified implementations for the official [LLaVA-NeXT](https://github.com/LLaVA-VL/LLaVA-NeXT) codebase.
+Our trained VLMs use [SigLIP-SO400M-Patch14-384](https://huggingface.co/google/siglip-so400m-patch14-384) as the vision encoder and are trained on selected portions of [Infinity-MM](https://huggingface.co/datasets/BAAI/Infinity-MM). Refer to the corresponding model card for backbone-specific configuration and training data details.
 
-Our trained VLMs use [SigLIP-SO400M-Patch14-384](https://huggingface.co/google/siglip-so400m-patch14-384) as the vision encoder and are trained on selected portions of [Infinity-MM](https://huggingface.co/datasets/BAAI/Infinity-MM). See the corresponding model card for backbone-specific model details and training data information.
+This repository focuses on **running inference with trained VLM checkpoints**. For capability scaling law fitting, and evaluation results, see the [main repository](https://github.com/wangq-dev/CDMScaling).
 
 ## How to Use
 
 ### Step 1. Set Up the Environment
 
-Create a conda environment and install the required dependencies:
+Clone this repository and run the following commands from its root directory. Create a conda environment and install the required dependencies:
 
 ```bash
 conda create -n llava python=3.10 -y
@@ -18,9 +29,11 @@ conda activate llava
 pip install -r requirements.txt
 ```
 
+GPU inference requires a CUDA-compatible environment with the appropriate PyTorch and CUDA dependencies installed.
+
 ### Step 2. Install LLaVA-NeXT
 
-Clone the official LLaVA-NeXT repository and install the package:
+Clone the official LLaVA-NeXT repository into the root directory of this project and install it in editable mode:
 
 ```bash
 git clone https://github.com/LLaVA-VL/LLaVA-NeXT.git
@@ -29,23 +42,23 @@ pip install -e .
 cd ..
 ```
 
+**Compatibility note:** The adaptation files may depend on the upstream LLaVA-NeXT version. If you have validated them against a specific commit, use that commit instead of relying on the latest default branch.
+
 ### Step 3. Apply Model Adaptations
 
-Replace the corresponding files in the cloned LLaVA-NeXT repository with the modified implementations provided in this project.
-
-Run the following command from the project root directory:
+Replace the corresponding files in LLaVA-NeXT with the modified implementations provided in this repository. From the project root, run:
 
 ```bash
 bash apply_model_adaptations.sh
 ```
 
-The script copies the adapted conversation, model-building, language-model, and multimodal resampler implementations into `LLaVA-NeXT/llava/`. Existing files with matching names will be overwritten. Make sure `LLaVA-NeXT/` and `LLaVA-NeXT_replace_files/` are located in the project root before running the script.
+The script copies adapted conversation, model-building, language-model, and multimodal resampler implementations into `LLaVA-NeXT/llava/`. **Files with matching names will be overwritten.** Ensure that both `LLaVA-NeXT/` and `LLaVA-NeXT_replace_files/` are located in the project root before running the script.
 
 ### Step 4. Run Inference
 
-We provide `infer_llava_gpu.py` for single-image inference with a trained VLM checkpoint. The script supports configurable model paths, conversation templates, and generation settings.
+Download a compatible trained VLM checkpoint from [ModelScope](https://modelscope.ai/profile/wangq2k), or use an existing local checkpoint. The `infer_llava_gpu.py` script supports single-image inference with configurable model paths, conversation templates, and generation settings.
 
-Run inference using the following command:
+From the project root, run:
 
 ```bash
 python infer_llava_gpu.py \
@@ -58,13 +71,13 @@ python infer_llava_gpu.py \
     --max-new-tokens 512
 ```
 
-Replace `/path/to/model/checkpoint` with the path to your trained model checkpoint and `/path/to/image.jpg` with the path to your input image. Set `<model_name>` and `<conv_template>` according to the language model backbone.
+Replace `/path/to/model/checkpoint` with the checkpoint directory and `/path/to/image.jpg` with the input image path. Set `<model_name>` and `<conv_template>` to the values required by the selected language model backbone and its corresponding model implementation.
 
-The script loads the trained model, preprocesses the input image, and generates a textual response. GPU inference is required, and `--device-map auto` enables automatic device placement.
+The script loads the model, preprocesses the image, and generates a textual response. GPU inference is required. The `--device-map auto` option enables automatic device placement, subject to available GPU memory and the installed dependencies.
 
 ## Citation
 
-If you find this work useful, please cite the following paper:
+If you find this work useful, please cite our paper:
 
 ```bibtex
 @misc{li2026transferstextvisioncapability,
