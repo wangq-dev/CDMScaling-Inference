@@ -9,7 +9,7 @@ This repository provides model adaptations and a single-image GPU inference scri
 - 📄 **Paper:** [What Transfers from Text to Vision? Capability Scaling Laws and Transfer Dynamics for VLMs](https://arxiv.org/abs/2608.00013)
 - 🌐 **Project Website:** [CDMScaling](https://wangq-dev.github.io/CDMScaling-Website/)
 - 💻 **Main Repository:** [CDMScaling](https://github.com/wangq-dev/CDMScaling)
-- 🤗 **Model Weights:** [ModelScope](https://modelscope.ai/profile/wangq2k)
+- 🤖 **Model Weights:** [ModelScope](https://modelscope.ai/profile/wangq2k)
 
 ## Introduction
 
