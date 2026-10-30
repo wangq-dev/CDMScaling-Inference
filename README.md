@@ -52,7 +52,7 @@ Replace the corresponding files in LLaVA-NeXT with the modified implementations 
 bash apply_model_adaptations.sh
 ```
 
-The script copies adapted conversation, model-building, language-model, and multimodal resampler implementations into `LLaVA-NeXT/llava/`. **Files with matching names will be overwritten.** Ensure that both `LLaVA-NeXT/` and `LLaVA-NeXT_replace_files/` are located in the project root before running the script.
+The script copies adapted conversation, model-building, and language-model into `LLaVA-NeXT/llava/`. **Files with matching names will be overwritten.** Ensure that both `LLaVA-NeXT/` and `LLaVA-NeXT_replace_files/` are located in the project root before running the script.
 
 ### Step 4. Run Inference
 
